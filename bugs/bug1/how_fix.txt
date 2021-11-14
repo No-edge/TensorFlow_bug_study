@@ -1,0 +1,14 @@
+The author use this 2 line code to update each weights, 
+
+model.layers[j].kernel = tf.subtract(model.layers[j].kernel, tf.multiply(lr_inner, gradients[k]))
+model.layers[j].bias = tf.subtract(model.layers[j].bias, tf.multiply(lr_inner, gradients[k + 1]))
+
+but it is wrong, as these 2 variable are not simply tensor type in tensorflow, they are special type in tensorflow,
+but they are assigned a different type, so in the second round of the training, there is no weights need to train,
+as they have been assigned a totally different type's value, the original variable have lost.
+
+see figure1.png, it shows the real run time message to help understand.
+The fix can be easily done by using assign series api, the following 2 line code showed.
+
+model.layers[j].kernel.assign_sub(tf.multiply(lr_inner, gradients[k]))
+model.layers[j].bias.assign_sub(tf.multiply(lr_inner, gradients[k + 1]))
