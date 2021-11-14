@@ -1,0 +1,9 @@
+link:https://stackoverflow.com/questions/63840447/tensorflow-backend-bug-in-model-make-predict-function
+Don't found function _make_predict_function()
+
+partial code:
+	model = deepmoji_emojis(maxlen, PRETRAINED_PATH)
+	model.summary()
+	model._make_predict_function()
+
+due to tensorflow update, it have been changed to make_predict_function()
