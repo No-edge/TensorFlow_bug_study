@@ -1,0 +1,2 @@
+When Running the code, the training accuracy is always 0.5, 0, 1, which is very strange, and different with the truth value.
+It is caused by wrong operation about 
