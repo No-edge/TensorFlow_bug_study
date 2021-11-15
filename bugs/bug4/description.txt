@@ -1,0 +1,10 @@
+link:https://stackoverflow.com/questions/57891940/python-tensorflow-tensorboard-notfounderror-error-message-in-windows
+
+# ERROR MESSAGE 
+     NotFoundError                             Traceback (most recent call last)
+     <ipython-input-6-c627053c0717> in <module>
+     67           epochs=5,
+     68           validation_split=0.2,
+---> 69           callbacks=[tensorboard])
+
+using Tensorflow with Python 3.7.4 (64bit) in Windows 10.
