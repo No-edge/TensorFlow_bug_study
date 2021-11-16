@@ -1,0 +1,66 @@
+link:https://stackoverflow.com/questions/62986661/tensorflow-probability-incompatible-shapes-error-on-log-prob-of-jointdistributio
+
+---------------------------------------------------------------------------
+InvalidArgumentError                      Traceback (most recent call last)
+<ipython-input-41-61bae7ab690a> in <module>
+      1 joint_model.log_prob(joint_model.sample())
+      2 # ERROR
+----> 3 joint_model.log_prob(joint_model.sample(4))
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow_probability/python/distributions/joint_distribution.py in log_prob(self, *args, **kwargs)
+    479         model_flatten_fn=self._model_flatten,
+    480         model_unflatten_fn=self._model_unflatten)
+--> 481     return self._call_log_prob(value, **unmatched_kwargs)
+    482 
+    483   # Override the base method to capture *args and **kwargs, so we can
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow_probability/python/distributions/distribution.py in _call_log_prob(self, value, name, **kwargs)
+    944     with self._name_and_control_scope(name, value, kwargs):
+    945       if hasattr(self, '_log_prob'):
+--> 946         return self._log_prob(value, **kwargs)
+    947       if hasattr(self, '_prob'):
+    948         return tf.math.log(self._prob(value, **kwargs))
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow_probability/python/distributions/joint_distribution.py in _log_prob(self, value)
+    391   def _log_prob(self, value):
+    392     xs = self._map_measure_over_dists('log_prob', value)
+--> 393     return sum(maybe_check_wont_broadcast(xs, self.validate_args))
+    394 
+    395   @distribution_util.AppendDocstring(kwargs_dict={
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py in binary_op_wrapper(x, y)
+    982     with ops.name_scope(None, op_name, [x, y]) as name:
+    983       if isinstance(x, ops.Tensor) and isinstance(y, ops.Tensor):
+--> 984         return func(x, y, name=name)
+    985       elif not isinstance(y, sparse_tensor.SparseTensor):
+    986         try:
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow/python/ops/math_ops.py in _add_dispatch(x, y, name)
+   1274     return gen_math_ops.add(x, y, name=name)
+   1275   else:
+-> 1276     return gen_math_ops.add_v2(x, y, name=name)
+   1277 
+   1278 
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow/python/ops/gen_math_ops.py in add_v2(x, y, name)
+    478         pass  # Add nodes to the TensorFlow graph.
+    479     except _core._NotOkStatusException as e:
+--> 480       _ops.raise_from_not_ok_status(e, name)
+    481   # Add nodes to the TensorFlow graph.
+    482   _, _, _op, _outputs = _op_def_library._apply_op_helper(
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/tensorflow/python/framework/ops.py in raise_from_not_ok_status(e, name)
+   6651   message = e.message + (" name: " + name if name is not None else "")
+   6652   # pylint: disable=protected-access
+-> 6653   six.raise_from(core._status_to_exception(e.code, message), None)
+   6654   # pylint: enable=protected-access
+   6655 
+
+~/miniconda3/envs/latent2/lib/python3.7/site-packages/six.py in raise_from(value, from_value)
+
+InvalidArgumentError: Incompatible shapes: [4] vs. [4,3] [Op:AddV2]
+
+
+
+Because the author pass wrong argument tfd.HalfCauchy(loc=tf.zeros([3]), scale=2., name='lambda_k'), it should be 
+tfd.Independent(tfd.HalfCauchy(loc=tf.zeros([3]), scale=2., name='lambda_k'), reinterpreted_batch_ndims=1)
