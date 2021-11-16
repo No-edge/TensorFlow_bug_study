@@ -1,0 +1,2 @@
+link:https://stackoverflow.com/questions/60711423/valueerror-error-when-checking-input-expected-lstm-12-input-to-have-shape-579
+The input X_train has type (n, 7, 1), but X_train.type return (n, 7), in fact, an data point is a (7, 1) type.
