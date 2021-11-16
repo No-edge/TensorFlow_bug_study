@@ -1,0 +1,5 @@
+link:https://stackoverflow.com/questions/57596943/segmentation-violation-sigsegv-when-loading-a-keras-tensorflow-model-thats-use
+Author get a SIGSEGV signal when load_model, then he run it step by step, find it is caused by lambda layer.
+
+It is because load_model need more arguments, in its parameter custom_objects, we need to add some_number, batch_size, sample_size, reps, everything in custom_objects,
+which occur in the lambda layer.
