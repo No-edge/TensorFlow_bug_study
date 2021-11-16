@@ -1,0 +1,18 @@
+link:https://stackoverflow.com/questions/57660161/network-bug-inception-v1-isnt-training
+
+The author find the network cost stays almost constant and he can't find the bug.
+
+The author don't give all code and dataset.
+
+The outputs are below
+Cost after epoch 0: 2.455999 , Learning rate: 0.001000
+Cost after epoch 5: 2.454697 , Learning rate: 0.001000
+Cost after epoch 10: 2.454670 , Learning rate: 0.000950
+Cost after epoch 15: 2.454655 , Learning rate: 0.000950
+Cost after epoch 20: 2.454650 , Learning rate: 0.000857
+Cost after epoch 25: 2.454649 , Learning rate: 0.000735
+Cost after epoch 30: 2.454659 , Learning rate: 0.000735
+Cost after epoch 35: 2.454643 , Learning rate: 0.000599
+Cost after epoch 40: 2.454627 , Learning rate: 0.000463
+...
+...

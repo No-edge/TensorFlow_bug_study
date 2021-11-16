@@ -1,0 +1,12 @@
+link:https://stackoverflow.com/questions/69354813/unexpected-result-when-using-tensorflow-matmul-dtype-tf-float32
+
+Can't reproduce. The author said when using tensorflow 2.3.0, tf.matmul(a,a) will return wrong answer as below.
+-------------------
+tf.Tensor(
+[[2. 2.]
+ [3. 3.]], shape=(2, 2), dtype=float32)
+-------------------
+tf.Tensor(
+[[10. 10.]
+ [ 0.  0.]], shape=(2, 2), dtype=float32)
+But when using float64 or int won't.

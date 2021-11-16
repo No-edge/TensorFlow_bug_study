@@ -1,0 +1,3 @@
+link:https://stackoverflow.com/questions/66927645/tensorflow-subclass-keras-with-mulitple-output-shape
+
+The author forget to build graph, so print a wrong graph

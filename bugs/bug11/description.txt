@@ -1,0 +1,4 @@
+link:https://stackoverflow.com/questions/54613474/tensorflow-keras-input-layer-does-not-add-keras-shape
+
+Author use wrong function, as there are 2 Input(...) in tensorflow,
+Author actually want the Input(...) in keras.layers, rather than tf.keras.layers

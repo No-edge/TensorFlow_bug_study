@@ -1,0 +1,91 @@
+link:https://stackoverflow.com/questions/55772880/tf-2-0-method-estimator-model-to-estimator-fails-but-model-fit-works-for-tf
+
+It seems is a tensorflow bug, 
+this issue was caused by the combination of tf.function in keras layer and v1 tf.session which is used by model_to_estimator.
+fix detail:https://github.com/tensorflow/tensorflow/issues/27750
+
+Output:
+Model  RNN
+Model: "sequential_27"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+reshape_27 (Reshape)         (None, 16, 1)             0         
+_________________________________________________________________
+unified_gru_57 (UnifiedGRU)  (None, 16, 32)            3360      
+_________________________________________________________________
+unified_gru_58 (UnifiedGRU)  (None, 32)                6336      
+_________________________________________________________________
+dense_27 (Dense)             (None, 1)                 33        
+=================================================================
+Total params: 9,729
+Trainable params: 9,729
+Non-trainable params: 0
+_________________________________________________________________
+---------------------------------------------------------------------------
+InvalidArgumentError                      Traceback (most recent call last)
+<ipython-input-52-05ea50da2f1c> in <module>()
+      5 #Convert Keras model to Estimator
+      6 # tf.disable_eager_execution()
+----> 7 estimator = tf.keras.estimator.model_to_estimator(keras_model=model_fn_keras())
+      8 # estimator = model_fn_keras()
+      9 
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\keras\estimator\__init__.py in model_to_estimator(keras_model, keras_model_path, custom_objects, model_dir, config)
+     71       custom_objects=custom_objects,
+     72       model_dir=model_dir,
+---> 73       config=config)
+     74 
+     75 # LINT.ThenChange(//tensorflow_estimator/python/estimator/keras.py)
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow_estimator\python\estimator\keras.py in model_to_estimator(keras_model, keras_model_path, custom_objects, model_dir, config)
+    488   if keras_model._is_graph_network:
+    489     warm_start_path = _save_first_checkpoint(keras_model, custom_objects,
+--> 490                                              config)
+    491   elif keras_model.built:
+    492     logging.warning('You are creating an Estimator from a Keras model manually '
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow_estimator\python\estimator\keras.py in _save_first_checkpoint(keras_model, custom_objects, config)
+    365           # pylint: disable=protected-access
+    366           model._make_train_function()
+--> 367           K._initialize_variables(sess)
+    368           # pylint: enable=protected-access
+    369         saver = saver_lib.Saver()
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\keras\backend.py in _initialize_variables(session)
+    760     # marked as initialized.
+    761     is_initialized = session.run(
+--> 762         [variables_module.is_variable_initialized(v) for v in candidate_vars])
+    763     uninitialized_vars = []
+    764     for flag, v in zip(is_initialized, candidate_vars):
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\client\session.py in run(self, fetches, feed_dict, options, run_metadata)
+    928     try:
+    929       result = self._run(None, fetches, feed_dict, options_ptr,
+--> 930                          run_metadata_ptr)
+    931       if run_metadata:
+    932         proto_data = tf_session.TF_GetBuffer(run_metadata_ptr)
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\client\session.py in _run(self, handle, fetches, feed_dict, options, run_metadata)
+   1151     if final_fetches or final_targets or (handle and feed_dict_tensor):
+   1152       results = self._do_run(handle, final_targets, final_fetches,
+-> 1153                              feed_dict_tensor, options, run_metadata)
+   1154     else:
+   1155       results = []
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\client\session.py in _do_run(self, handle, target_list, fetch_list, feed_dict, options, run_metadata)
+   1327     if handle is None:
+   1328       return self._do_call(_run_fn, feeds, fetches, targets, options,
+-> 1329                            run_metadata)
+   1330     else:
+   1331       return self._do_call(_prun_fn, handle, feeds, fetches)
+
+c:\users\hrafiq\appdata\local\programs\python\python35\lib\site-packages\tensorflow\python\client\session.py in _do_call(self, fn, *args)
+   1347           pass
+   1348       message = error_interpolation.interpolate(message, self._graph)
+-> 1349       raise type(e)(node_def, op, message)
+   1350 
+   1351   def _extend_graph(self):
+
+InvalidArgumentError: Node 'training/SGD/gradients/unified_gru_58/StatefulPartitionedCall_grad/StatefulPartitionedCall': Connecting to invalid output 4 of source node unified_gru_58/StatefulPartitionedCall which has 4 outputs
+
